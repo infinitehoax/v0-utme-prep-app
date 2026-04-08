@@ -111,11 +111,12 @@ export default function App() {
       const userName = name.trim();
       
       // Check if user exists in leaderboard
-      const { data: existingUser } = await supabase
+      const { data: existingUsers, error } = await supabase
         .from("leaderboard")
         .select("*")
-        .eq("name", userName)
-        .single();
+        .eq("name", userName);
+
+      const existingUser = existingUsers && existingUsers.length > 0 ? existingUsers[0] : null;
 
       if (existingUser) {
         const oldAvg = existingUser.average_percentage || 0;
