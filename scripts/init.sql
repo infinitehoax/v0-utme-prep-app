@@ -1,5 +1,8 @@
+-- Drop existing table if it exists to avoid conflicts
+DROP TABLE IF EXISTS leaderboard CASCADE;
+
 -- Create leaderboard table for UTME app
-CREATE TABLE IF NOT EXISTS leaderboard (
+CREATE TABLE leaderboard (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name TEXT NOT NULL UNIQUE,
   average_percentage DECIMAL(5, 2) NOT NULL,
@@ -10,7 +13,7 @@ CREATE TABLE IF NOT EXISTS leaderboard (
 );
 
 -- Create index for faster queries
-CREATE INDEX IF NOT EXISTS idx_leaderboard_avg ON leaderboard(average_percentage DESC);
+CREATE INDEX idx_leaderboard_avg ON leaderboard(average_percentage DESC);
 
 -- Enable RLS (Row Level Security)
 ALTER TABLE leaderboard ENABLE ROW LEVEL SECURITY;
