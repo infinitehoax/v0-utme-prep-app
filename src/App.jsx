@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { collection, doc, getDoc, setDoc, getDocs, query, orderBy, limit } from "firebase/firestore";
-import { db } from "./firebase";
+import { supabase } from "./supabaseClient";
 import "./App.css";
 
 // PASTE YOUR 200 QUESTIONS HERE (I left 5 as a template)
@@ -109,33 +108,39 @@ export default function App() {
     
     setLoading(true);
     try {
-      // Use their lowercase name as ID to prevent duplicate leaderboard entries
-      const safeDocId = name.trim().toLowerCase().replace(/\s+/g, "_");
-      const userRef = doc(db, "leaderboard", safeDocId);
-      const docSnap = await getDoc(userRef);
+      const userName = name.trim();
+      
+      // Check if user exists in leaderboard
+      const { data: existingUser } = await supabase
+        .from("leaderboard")
+        .select("*")
+        .eq("name", userName)
+        .single();
 
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        const oldAvg = data.averagePercentage || 0;
-        const oldAttempts = data.totalAttempts || 0;
+      if (existingUser) {
+        const oldAvg = existingUser.average_percentage || 0;
+        const oldAttempts = existingUser.total_attempts || 0;
         
         // Calculate new cumulative average
         const newAvg = ((oldAvg * oldAttempts) + percentage) / (oldAttempts + 1);
         
-        await setDoc(userRef, {
-          name: name.trim(),
-          averagePercentage: Number(newAvg.toFixed(2)),
-          totalAttempts: oldAttempts + 1,
-          lastAttempt: new Date()
-        }, { merge: true });
-
+        await supabase
+          .from("leaderboard")
+          .update({
+            average_percentage: Number(newAvg.toFixed(2)),
+            total_attempts: oldAttempts + 1,
+            last_attempt: new Date().toISOString()
+          })
+          .eq("name", userName);
       } else {
-        await setDoc(userRef, {
-          name: name.trim(),
-          averagePercentage: percentage,
-          totalAttempts: 1,
-          lastAttempt: new Date()
-        });
+        await supabase
+          .from("leaderboard")
+          .insert({
+            name: userName,
+            average_percentage: percentage,
+            total_attempts: 1,
+            last_attempt: new Date().toISOString()
+          });
       }
     } catch (e) {
       console.error("Error saving to global leaderboard: ", e);
@@ -147,10 +152,13 @@ export default function App() {
     setScreen("leaderboard");
     setLoading(true);
     try {
-      const q = query(collection(db, "leaderboard"), orderBy("averagePercentage", "desc"), limit(50));
-      const querySnapshot = await getDocs(q);
-      const data = querySnapshot.docs.map(doc => doc.data());
-      setLeaderboard(data);
+      const { data } = await supabase
+        .from("leaderboard")
+        .select("*")
+        .order("average_percentage", { ascending: false })
+        .limit(50);
+      
+      setLeaderboard(data || []);
     } catch (e) {
       console.error("Error fetching leaderboard: ", e);
     }
@@ -245,8 +253,8 @@ export default function App() {
                     <tr key={index}>
                       <td>#{index + 1}</td>
                       <td>{entry.name}</td>
-                      <td style={{ color: "#00c853", fontWeight: "bold" }}>{entry.averagePercentage}%</td>
-                      <td style={{ textAlign: "center" }}>{entry.totalAttempts}</td>
+                      <td style={{ color: "#00c853", fontWeight: "bold" }}>{entry.average_percentage}%</td>
+                      <td style={{ textAlign: "center" }}>{entry.total_attempts}</td>
                     </tr>
                   ))}
                 </tbody>
