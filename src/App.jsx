@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { collection, doc, getDoc, setDoc, getDocs, query, orderBy, limit } from "firebase/firestore";
-import { supabase } from "./supabaseClient";
+import { supabase } from "./supabaseClient"; // Only Supabase is imported now!
 import "./App.css";
 
 // Your Quiz Data
