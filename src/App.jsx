@@ -1,36 +1,36 @@
 import { useState, useEffect } from "react";
-import { supabase } from "./supabaseClient";
+import { supabase } from "./supabaseClient"; // <-- Using your Supabase Client
 import "./App.css";
 
-// PASTE YOUR 200 QUESTIONS HERE (I left 5 as a template)
+// Your Quiz Data
 const allQuizData = [
   { id: 1, question: "Who is the author of 'The Lekki Headmaster'?", options: ["A) Wole Soyinka", "B) Kabir Alabi Garba", "C) Chinua Achebe", "D) Akeem Lasisi"], answer: 1 },
   { id: 2, question: "What is the full name of the protagonist?", options: ["A) Jeremi Amos", "B) Mr. Ope Wande", "C) Adebepo Adewale", "D) Funso Daniels"], answer: 2 },
   { id: 3, question: "What nickname do the students affectionately call the principal?", options: ["A) Oga Tisa", "B) Principoo", "C) Lekki Boss", "D) Mr. Wala"], answer: 1 },
   { id: 4, question: "What chronic ailment did the Managing Director suffer from?", options: ["A) Migraines", "B) Asthma", "C) Peppery pain in her buttocks", "D) High blood pressure"], answer: 2 },
-  { id: 5, question: "How much was the new maximum loan limit set by the Stardom Board?", options: ["A) N100,000", "B) N250,000", "C) N500,000", "D) N2 million"], answer: 1 }
+  { id: 5, question: "How much was the new maximum loan limit set by the Stardom Board?", options: ["A) N100,000", "B) N250,000", "C) N500,000", "D) N2 million"], answer: 1 },
+  // ... Add the rest of your questions here
 ];
 
-// Helper Function: Shuffles the array so users get random questions
 const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
 
 export default function App() {
-  const [screen, setScreen] = useState("login"); 
+  const [screen, setScreen] = useState("login");
   const [name, setName] = useState("");
   const [isNameLocked, setIsNameLocked] = useState(false);
   const [numQuestions, setNumQuestions] = useState(5);
-  
+
   const [activeQuestions, setActiveQuestions] = useState([]);
   const [currentQ, setCurrentQ] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedOpt, setSelectedOpt] = useState(null);
   const [timeLeft, setTimeLeft] = useState(0);
-  
+
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(false);
   const [attemptResult, setAttemptResult] = useState(0);
 
-  // 1. On Load: Check if name is locked in localStorage for 15 days
+  // Load Lock Status
   useEffect(() => {
     const lockedData = JSON.parse(localStorage.getItem("utme_username_lock"));
     if (lockedData) {
@@ -44,7 +44,7 @@ export default function App() {
     }
   }, []);
 
-  // 2. Timer Countdown Logic
+  // Timer
   useEffect(() => {
     if (screen !== "quiz") return;
     if (timeLeft <= 0) {
@@ -64,23 +64,21 @@ export default function App() {
   const startQuiz = () => {
     const trimmedName = name.trim();
     if (!trimmedName) return alert("Please enter your name!");
-    
-    // Lock Name for 15 Days
+
     if (!isNameLocked) {
       const expiryTime = new Date().getTime() + (15 * 24 * 60 * 60 * 1000);
       localStorage.setItem("utme_username_lock", JSON.stringify({ name: trimmedName, expiry: expiryTime }));
       setIsNameLocked(true);
     }
 
-    // Shuffle and pick requested amount of questions
     const requestedAmount = Math.min(Math.max(Number(numQuestions), 5), allQuizData.length);
     const shuffled = shuffleArray(allQuizData).slice(0, requestedAmount);
-    
+
     setActiveQuestions(shuffled);
     setCurrentQ(0);
     setScore(0);
     setSelectedOpt(null);
-    setTimeLeft(requestedAmount * 45); // Automatically gives 45 seconds per question
+    setTimeLeft(requestedAmount * 45);
     setScreen("quiz");
   };
 
@@ -90,7 +88,7 @@ export default function App() {
       newScore = score + 1;
       setScore(newScore);
     }
-    
+
     if (currentQ < activeQuestions.length - 1) {
       setCurrentQ((prev) => prev + 1);
       setSelectedOpt(null);
@@ -102,49 +100,50 @@ export default function App() {
   const handleEndQuiz = async (finalScore = score) => {
     setScreen("result");
     setScore(finalScore);
-    
+
     const percentage = Number(((finalScore / activeQuestions.length) * 100).toFixed(2));
     setAttemptResult(percentage);
-    
     setLoading(true);
+
     try {
-      const userName = name.trim();
-      
-      // Check if user exists in leaderboard
-      const { data: existingUsers, error } = await supabase
-        .from("leaderboard")
-        .select("*")
-        .eq("name", userName);
+      // 1. Generate the ID (e.g., "david_ayo")
+      const safeId = name.trim().toLowerCase().replace(/\s+/g, "_");
 
-      const existingUser = existingUsers && existingUsers.length > 0 ? existingUsers[0] : null;
+      // 2. Fetch existing user from Supabase
+      const { data: existingUser, error: fetchError } = await supabase
+        .from('leaderboard')
+        .select('*')
+        .eq('id', safeId)
+        .single(); // Gets single row if it exists
 
+      let newAvg = percentage;
+      let newAttempts = 1;
+
+      // 3. If user exists, calculate the new cumulative average
       if (existingUser) {
         const oldAvg = existingUser.average_percentage || 0;
         const oldAttempts = existingUser.total_attempts || 0;
-        
-        // Calculate new cumulative average
-        const newAvg = ((oldAvg * oldAttempts) + percentage) / (oldAttempts + 1);
-        
-        await supabase
-          .from("leaderboard")
-          .update({
-            average_percentage: Number(newAvg.toFixed(2)),
-            total_attempts: oldAttempts + 1,
-            last_attempt: new Date().toISOString()
-          })
-          .eq("name", userName);
-      } else {
-        await supabase
-          .from("leaderboard")
-          .insert({
-            name: userName,
-            average_percentage: percentage,
-            total_attempts: 1,
-            last_attempt: new Date().toISOString()
-          });
+        newAvg = ((oldAvg * oldAttempts) + percentage) / (oldAttempts + 1);
+        newAttempts = oldAttempts + 1;
       }
+
+      // 4. UPSERT (Update if exists, Insert if new) into Supabase
+      const { error: upsertError } = await supabase
+        .from('leaderboard')
+        .upsert({
+          id: safeId,                  // <--- This fixes the NULL ID error!
+          name: name.trim(),
+          average_percentage: Number(newAvg.toFixed(2)),
+          total_attempts: newAttempts,
+          last_attempt: new Date().toISOString()
+        });
+
+      if (upsertError) {
+        console.error("Supabase Upsert Error:", upsertError.message);
+      }
+
     } catch (e) {
-      console.error("Error saving to global leaderboard: ", e);
+      console.error("Critical error saving to Supabase:", e);
     }
     setLoading(false);
   };
@@ -153,15 +152,16 @@ export default function App() {
     setScreen("leaderboard");
     setLoading(true);
     try {
-      const { data } = await supabase
-        .from("leaderboard")
-        .select("*")
-        .order("average_percentage", { ascending: false })
+      const { data, error } = await supabase
+        .from('leaderboard')
+        .select('*')
+        .order('average_percentage', { ascending: false })
         .limit(50);
-      
-      setLeaderboard(data || []);
+
+      if (error) console.error("Error fetching leaderboard:", error);
+      if (data) setLeaderboard(data);
     } catch (e) {
-      console.error("Error fetching leaderboard: ", e);
+      console.error("Critical error fetching from Supabase:", e);
     }
     setLoading(false);
   };
@@ -172,32 +172,19 @@ export default function App() {
         <>
           <h1>UTME Mock Exam</h1>
           <h2>The Lekki Headmaster</h2>
-          
           {isNameLocked ? (
-             <p style={{ color: "#d32f2f", fontWeight: "bold", fontSize: "0.9rem" }}>
-               🔒 Your name is locked to this device for 15 days to prevent cheating.
-             </p>
+            <p style={{ color: "#d32f2f", fontWeight: "bold", fontSize: "0.9rem" }}>
+              🔒 Your name is locked to this device for 15 days.
+            </p>
           ) : (
             <p>Enter your real name. It will be locked for 15 days!</p>
           )}
 
-          <input 
-            type="text" 
-            placeholder="Enter your full name..." 
-            value={name} 
-            onChange={(e) => setName(e.target.value)} 
-            disabled={isNameLocked}
-          />
+          <input type="text" placeholder="Enter your full name..." value={name} onChange={(e) => setName(e.target.value)} disabled={isNameLocked} />
 
           <div style={{ marginBottom: "20px", textAlign: "left" }}>
             <label style={{ fontWeight: "600", color: "#333" }}>Select Number of Questions:</label>
-            <input 
-              type="number" 
-              min="5" 
-              max={allQuizData.length} 
-              value={numQuestions} 
-              onChange={(e) => setNumQuestions(e.target.value)}
-            />
+            <input type="number" min="5" max={allQuizData.length} value={numQuestions} onChange={(e) => setNumQuestions(e.target.value)} />
             <small style={{ color: "#888" }}>Max available: {allQuizData.length} (Randomized)</small>
           </div>
 
@@ -215,9 +202,7 @@ export default function App() {
           <div className="question">{activeQuestions[currentQ].question}</div>
           <div className="options">
             {activeQuestions[currentQ].options.map((opt, i) => (
-              <div key={i} className={`option ${selectedOpt === i ? "selected" : ""}`} onClick={() => setSelectedOpt(i)}>
-                {opt}
-              </div>
+              <div key={i} className={`option ${selectedOpt === i ? "selected" : ""}`} onClick={() => setSelectedOpt(i)}>{opt}</div>
             ))}
           </div>
           <button style={{ marginTop: "20px" }} disabled={selectedOpt === null} onClick={nextQuestion}>
@@ -242,7 +227,7 @@ export default function App() {
       {screen === "leaderboard" && (
         <>
           <h1>🌍 Global Ranking</h1>
-          <p style={{fontSize: "0.85rem", color: "#666"}}>Ranked by Cumulative Average Percentage</p>
+          <p style={{ fontSize: "0.85rem", color: "#666" }}>Ranked by Cumulative Average Percentage</p>
           {loading ? <p>Loading scores from cloud...</p> : (
             <div className="table-wrapper">
               <table>
