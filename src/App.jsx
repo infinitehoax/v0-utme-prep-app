@@ -367,10 +367,23 @@ export default function App() {
       setIsNameLocked(true);
     }
 
-    const requestedAmount = Math.min(Math.max(Number(numQuestions), 5), allQuizData.length);
-    const shuffled = shuffleArray(allQuizData).slice(0, requestedAmount);
+    const passedIds = JSON.parse(localStorage.getItem("utme_passed_ids") || "[]");
+    const failedIds = JSON.parse(localStorage.getItem("utme_failed_ids") || "[]");
 
-    setActiveQuestions(shuffled);
+    let pool = allQuizData.filter(q => !passedIds.includes(q.id));
+    const requestedAmount = Math.min(Math.max(Number(numQuestions), 5), allQuizData.length);
+
+    if (pool.length < requestedAmount) {
+      localStorage.setItem("utme_passed_ids", "[]");
+      pool = allQuizData;
+    }
+
+    const failedInPool = pool.filter(q => failedIds.includes(q.id));
+    const freshInPool = pool.filter(q => !failedIds.includes(q.id));
+
+    const selection = [...shuffleArray(failedInPool), ...shuffleArray(freshInPool)].slice(0, requestedAmount);
+
+    setActiveQuestions(selection);
     setCurrentQ(0);
     setScore(0);
     setUserAnswers([]); // Clear previous answers
@@ -382,6 +395,7 @@ export default function App() {
   const handleTimeout = () => {
     // If timer runs out, record the current question with whatever they had selected (or null)
     const newAnswers = [...userAnswers, {
+      id: activeQuestions[currentQ].id,
       question: activeQuestions[currentQ].question,
       options: activeQuestions[currentQ].options,
       correctAnswer: activeQuestions[currentQ].answer,
@@ -398,6 +412,7 @@ export default function App() {
 
     // Save their selection to history for the Review Screen
     const newAnswers = [...userAnswers, {
+      id: activeQuestions[currentQ].id,
       question: activeQuestions[currentQ].question,
       options: activeQuestions[currentQ].options,
       correctAnswer: activeQuestions[currentQ].answer,
@@ -419,6 +434,23 @@ export default function App() {
     setScreen("result");
     setScore(finalScore);
     setUserAnswers(finalAnswers); // Make sure the last question gets saved to state
+
+    // Update passed/failed tracking
+    const passedIds = new Set(JSON.parse(localStorage.getItem("utme_passed_ids") || "[]"));
+    const failedIds = new Set(JSON.parse(localStorage.getItem("utme_failed_ids") || "[]"));
+
+    finalAnswers.forEach(ans => {
+      if (ans.selectedAnswer === ans.correctAnswer) {
+        passedIds.add(ans.id);
+        failedIds.delete(ans.id);
+      } else {
+        passedIds.delete(ans.id);
+        failedIds.add(ans.id);
+      }
+    });
+
+    localStorage.setItem("utme_passed_ids", JSON.stringify([...passedIds]));
+    localStorage.setItem("utme_failed_ids", JSON.stringify([...failedIds]));
 
     const percentage = Number(((finalScore / activeQuestions.length) * 100).toFixed(2));
     setAttemptResult(percentage);
