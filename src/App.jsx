@@ -429,6 +429,26 @@ export default function App() {
             {loading ? "Saving to global database..." : "Your average has been updated globally!"}
           </p>
 
+          <button 
+            onClick={() => {
+              const message = `🎯 I just scored ${attemptResult}% on the UTME Prep Quiz! Can you beat my score? Challenge me now: https://v0-utme-lekki.vercel.app/`;
+              const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+              window.open(whatsappUrl, "_blank");
+            }}
+            style={{ 
+              backgroundColor: "#25D366", 
+              color: "white",
+              border: "none",
+              padding: "10px 20px",
+              borderRadius: "5px",
+              cursor: "pointer",
+              marginBottom: "10px",
+              fontWeight: "600"
+            }}
+          >
+            📱 Share Score to WhatsApp
+          </button>
+
           <button onClick={fetchLeaderboard} disabled={loading}>View Global Leaderboard</button>
           <button className="btn-warning" onClick={() => setScreen("review")}>Review Wrong Answers</button>
           <button className="btn-secondary" onClick={() => setScreen("login")}>Take Another Batch</button>
