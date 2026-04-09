@@ -94,6 +94,14 @@ button:disabled {
   background: #00a042;
 }
 
+.btn-whatsapp {
+  background: #25d366;
+}
+
+.btn-whatsapp:hover {
+  background: #1ebe57;
+}
+
 .btn-warning {
   background: #ff9800;
 }

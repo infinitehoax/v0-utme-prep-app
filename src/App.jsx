@@ -468,6 +468,12 @@ export default function App() {
     setLoading(false);
   };
 
+  const shareToWhatsApp = () => {
+    const message = `I just scored ${score}/${activeQuestions.length} (${attemptResult}%) on the UTME Prep - The Lekki Headmaster mock exam! 📚 Think you can beat my score? Try it here: https://v0-utme-lekki.vercel.app/`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+  };
+
   // Filter out only the wrong answers for the Review Screen
   const wrongAnswers = userAnswers.filter(ans => ans.selectedAnswer !== ans.correctAnswer);
 
@@ -528,6 +534,7 @@ export default function App() {
             {loading ? "Saving to global database..." : "Your average has been updated globally!"}
           </p>
 
+          <button className="btn-whatsapp" onClick={shareToWhatsApp}>Share to WhatsApp</button>
           <button onClick={fetchLeaderboard} disabled={loading}>View Global Leaderboard</button>
           <button className="btn-warning" onClick={() => setScreen("review")}>Review Wrong Answers</button>
           <button className="btn-secondary" onClick={() => setScreen("login")}>Take Another Batch</button>
