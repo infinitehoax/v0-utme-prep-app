@@ -501,7 +501,7 @@ export default function App() {
   };
 
   const shareToWhatsApp = () => {
-    const message = `I just scored ${score}/${activeQuestions.length} (${attemptResult}%) on the UTME Prep - The Lekki Headmaster mock exam! 📚 Think you can beat my score? Try it here: https://v0-utme-lekki.vercel.app/`;
+    const message = `I just scored ${score}/${activeQuestions.length} (${attemptResult}%) on the UTME Prep - The Lekki Headmaster mock exam! Think you can beat my score? Try it here: https://v0-utme-lekki.vercel.app/`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   };
