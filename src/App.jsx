@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { collection, doc, getDoc, setDoc, getDocs, query, orderBy, limit } from "firebase/firestore";
 import { supabase } from "./supabaseClient";
 import "./App.css";
 
