@@ -824,6 +824,9 @@ export default function App() {
       {screen === "leaderboard" && (
         <>
           <h1>🌍 Global Ranking</h1>
+          <div className="notification-banner">
+            ⚠️ <strong>Notice:</strong> Due to database migration errors, previous scores were lost. Please attempt the exam again. We apologize for the inconvenience.
+          </div>
           <p style={{ fontSize: "0.85rem", color: "#666" }}>Ranked by Cumulative Average Percentage</p>
           {loading ? <p>Loading scores from cloud...</p> : (
             <div className="table-wrapper">

@@ -306,6 +306,18 @@ tr:nth-child(1) {
   box-shadow: inset 0 0 0 3px #fff;
 }
 
+.notification-banner {
+  background-color: #fff3e0;
+  border: 1px solid #ffb74d;
+  color: #e65100;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  text-align: left;
+}
+
 .review-correct {
   color: #00c853;
   font-size: 14px;
