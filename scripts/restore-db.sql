@@ -27,7 +27,7 @@ CREATE POLICY "Allow public read" ON leaderboard
 CREATE POLICY "Allow public insert" ON leaderboard
   FOR INSERT WITH CHECK (true);
 
--- Allow public update (only if device_token matches)
+-- Allow public update
 CREATE POLICY "Allow public update" ON leaderboard
-  FOR UPDATE USING (device_token IS NULL OR device_token = current_setting('request.jwt.claims', true)->>'device_token')
+  FOR UPDATE USING (true)
   WITH CHECK (true);
