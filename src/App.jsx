@@ -518,11 +518,11 @@ export default function App() {
   const [activeQuestions, setActiveQuestions] = useState([]);
   const [currentQ, setCurrentQ] = useState(0);
   const [score, setScore] = useState(0);
-  const [selectedOpt, setSelectedOpt] = useState(null);
   const [timeLeft, setTimeLeft] = useState(0);
 
-  // New state to track what the user actually clicked
+  // Tracks selected option index for each question
   const [userAnswers, setUserAnswers] = useState([]);
+  const [reviewAnswers, setReviewAnswers] = useState([]);
 
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -586,60 +586,60 @@ export default function App() {
     setActiveQuestions(selection);
     setCurrentQ(0);
     setScore(0);
-    setUserAnswers([]); // Clear previous answers
-    setSelectedOpt(null);
+    setUserAnswers(new Array(requestedAmount).fill(null));
     setTimeLeft(requestedAmount * 45);
     setScreen("quiz");
   };
 
   const handleTimeout = () => {
-    // If timer runs out, record the current question with whatever they had selected (or null)
-    const newAnswers = [...userAnswers, {
-      id: activeQuestions[currentQ].id,
-      question: activeQuestions[currentQ].question,
-      options: activeQuestions[currentQ].options,
-      correctAnswer: activeQuestions[currentQ].answer,
-      selectedAnswer: selectedOpt
-    }];
-    handleEndQuiz(score, newAnswers);
+    handleEndQuiz();
   };
 
   const nextQuestion = () => {
-    let newScore = score;
-    const isCorrect = selectedOpt === activeQuestions[currentQ].answer;
-
-    if (isCorrect) newScore += 1;
-
-    // Save their selection to history for the Review Screen
-    const newAnswers = [...userAnswers, {
-      id: activeQuestions[currentQ].id,
-      question: activeQuestions[currentQ].question,
-      options: activeQuestions[currentQ].options,
-      correctAnswer: activeQuestions[currentQ].answer,
-      selectedAnswer: selectedOpt
-    }];
-
-    setUserAnswers(newAnswers);
-    setScore(newScore);
-
     if (currentQ < activeQuestions.length - 1) {
       setCurrentQ((prev) => prev + 1);
-      setSelectedOpt(null);
     } else {
-      handleEndQuiz(newScore, newAnswers);
+      handleEndQuiz();
     }
   };
 
-  const handleEndQuiz = async (finalScore = score, finalAnswers = userAnswers) => {
-    setScreen("result");
+  const prevQuestion = () => {
+    if (currentQ > 0) {
+      setCurrentQ((prev) => prev - 1);
+    }
+  };
+
+  const selectOption = (index) => {
+    const updatedAnswers = [...userAnswers];
+    updatedAnswers[currentQ] = index;
+    setUserAnswers(updatedAnswers);
+  };
+
+  const handleEndQuiz = async () => {
+    // Calculate final score and prepare format for review
+    let finalScore = 0;
+    const reviewData = activeQuestions.map((q, i) => {
+      const selectedAnswer = userAnswers[i];
+      const isCorrect = selectedAnswer === q.answer;
+      if (isCorrect) finalScore++;
+      return {
+        id: q.id,
+        question: q.question,
+        options: q.options,
+        correctAnswer: q.answer,
+        selectedAnswer: selectedAnswer
+      };
+    });
+
     setScore(finalScore);
-    setUserAnswers(finalAnswers); // Make sure the last question gets saved to state
+    setReviewAnswers(reviewData);
+    setScreen("result");
 
     // Update passed/failed tracking
     const passedIds = new Set(JSON.parse(localStorage.getItem("utme_passed_ids") || "[]"));
     const failedIds = new Set(JSON.parse(localStorage.getItem("utme_failed_ids") || "[]"));
 
-    finalAnswers.forEach(ans => {
+    reviewData.forEach(ans => {
       if (ans.selectedAnswer === ans.correctAnswer) {
         passedIds.add(ans.id);
         failedIds.delete(ans.id);
@@ -707,7 +707,7 @@ export default function App() {
   };
 
   // Filter out only the wrong answers for the Review Screen
-  const wrongAnswers = userAnswers.filter(ans => ans.selectedAnswer !== ans.correctAnswer);
+  const wrongAnswers = reviewAnswers.filter(ans => ans.selectedAnswer !== ans.correctAnswer);
 
   return (
     <div className="container">
@@ -747,12 +747,31 @@ export default function App() {
           <div className="question">{activeQuestions[currentQ].question}</div>
           <div className="options">
             {activeQuestions[currentQ].options.map((opt, i) => (
-              <div key={i} className={`option ${selectedOpt === i ? "selected" : ""}`} onClick={() => setSelectedOpt(i)}>{opt}</div>
+              <div key={i} className={`option ${userAnswers[currentQ] === i ? "selected" : ""}`} onClick={() => selectOption(i)}>{opt}</div>
             ))}
           </div>
-          <button style={{ marginTop: "20px" }} disabled={selectedOpt === null} onClick={nextQuestion}>
-            {currentQ === activeQuestions.length - 1 ? "Submit Exam" : "Next Question"}
-          </button>
+
+          <div className="quiz-controls">
+            <button className="btn-nav" onClick={prevQuestion} disabled={currentQ === 0}>Previous</button>
+            <button className="btn-nav" onClick={nextQuestion}>
+              {currentQ === activeQuestions.length - 1 ? "Submit Exam" : "Next"}
+            </button>
+          </div>
+
+          <div className="navigator">
+            <p>Question Navigator</p>
+            <div className="nav-grid">
+              {activeQuestions.map((_, i) => (
+                <div
+                  key={i}
+                  className={`nav-item ${currentQ === i ? "active" : ""} ${userAnswers[i] !== null ? "answered" : ""}`}
+                  onClick={() => setCurrentQ(i)}
+                >
+                  {i + 1}
+                </div>
+              ))}
+            </div>
+          </div>
         </>
       )}
 
