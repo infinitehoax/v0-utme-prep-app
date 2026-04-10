@@ -514,6 +514,7 @@ export default function App() {
   const [name, setName] = useState("");
   const [isNameLocked, setIsNameLocked] = useState(false);
   const [numQuestions, setNumQuestions] = useState(5);
+  const [deviceToken, setDeviceToken] = useState("");
 
   const [activeQuestions, setActiveQuestions] = useState([]);
   const [currentQ, setCurrentQ] = useState(0);
@@ -522,6 +523,7 @@ export default function App() {
 
   // Tracks selected option index for each question
   const [userAnswers, setUserAnswers] = useState([]);
+  const [flaggedQuestions, setFlaggedQuestions] = useState([]);
   const [reviewAnswers, setReviewAnswers] = useState([]);
 
   const [leaderboard, setLeaderboard] = useState([]);
@@ -529,6 +531,14 @@ export default function App() {
   const [attemptResult, setAttemptResult] = useState(0);
 
   useEffect(() => {
+    // 1. Device Token Logic
+    let token = localStorage.getItem("utme_device_token");
+    if (!token) {
+      token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      localStorage.setItem("utme_device_token", token);
+    }
+    setDeviceToken(token);
+
     const lockedData = JSON.parse(localStorage.getItem("utme_username_lock"));
     if (lockedData) {
       const now = new Date().getTime();
@@ -557,15 +567,39 @@ export default function App() {
     return `${m}:${s}`;
   };
 
-  const startQuiz = () => {
+  const startQuiz = async () => {
     const trimmedName = name.trim();
     if (!trimmedName) return alert("Please enter your name!");
 
-    if (!isNameLocked) {
-      const expiryTime = new Date().getTime() + (15 * 24 * 60 * 60 * 1000);
-      localStorage.setItem("utme_username_lock", JSON.stringify({ name: trimmedName, expiry: expiryTime }));
-      setIsNameLocked(true);
+    setLoading(true);
+    try {
+      const safeId = trimmedName.toLowerCase().replace(/\s+/g, "_");
+      const { data: existingUser, error } = await supabase
+        .from('leaderboard')
+        .select('device_token')
+        .eq('id', safeId)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (existingUser && existingUser.device_token && existingUser.device_token !== deviceToken) {
+        alert("This username has already been claimed on another device. Please use a different name.");
+        setLoading(false);
+        return;
+      }
+
+      if (!isNameLocked) {
+        const expiryTime = new Date().getTime() + (15 * 24 * 60 * 60 * 1000);
+        localStorage.setItem("utme_username_lock", JSON.stringify({ name: trimmedName, expiry: expiryTime }));
+        setIsNameLocked(true);
+      }
+    } catch (e) {
+      console.error("Error checking username:", e);
+      alert("An error occurred. Please check your internet connection.");
+      setLoading(false);
+      return;
     }
+    setLoading(false);
 
     const passedIds = JSON.parse(localStorage.getItem("utme_passed_ids") || "[]");
     const failedIds = JSON.parse(localStorage.getItem("utme_failed_ids") || "[]");
@@ -587,6 +621,7 @@ export default function App() {
     setCurrentQ(0);
     setScore(0);
     setUserAnswers(new Array(requestedAmount).fill(null));
+    setFlaggedQuestions(new Array(requestedAmount).fill(false));
     setTimeLeft(requestedAmount * 45);
     setScreen("quiz");
   };
@@ -613,6 +648,12 @@ export default function App() {
     const updatedAnswers = [...userAnswers];
     updatedAnswers[currentQ] = index;
     setUserAnswers(updatedAnswers);
+  };
+
+  const toggleFlag = () => {
+    const updatedFlags = [...flaggedQuestions];
+    updatedFlags[currentQ] = !updatedFlags[currentQ];
+    setFlaggedQuestions(updatedFlags);
   };
 
   const handleEndQuiz = async () => {
@@ -680,7 +721,8 @@ export default function App() {
         name: name.trim(),
         average_percentage: Number(newAvg.toFixed(2)),
         total_attempts: newAttempts,
-        last_attempt: new Date().toISOString()
+        last_attempt: new Date().toISOString(),
+        device_token: deviceToken
       });
     } catch (e) {
       console.error("Critical error saving to Supabase:", e);
@@ -732,7 +774,9 @@ export default function App() {
             <small style={{ color: "#888" }}>Max available: {allQuizData.length} (Randomized)</small>
           </div>
 
-          <button onClick={startQuiz}>Start Exam</button>
+          <button onClick={startQuiz} disabled={loading}>
+            {loading ? "Checking name..." : "Start Exam"}
+          </button>
           <button className="btn-secondary" onClick={fetchLeaderboard}>View Global Leaderboard</button>
         </>
       )}
@@ -753,6 +797,9 @@ export default function App() {
 
           <div className="quiz-controls">
             <button className="btn-nav" onClick={prevQuestion} disabled={currentQ === 0}>Previous</button>
+            <button className="btn-flag" onClick={toggleFlag}>
+              {flaggedQuestions[currentQ] ? "Unflag" : "Flag"}
+            </button>
             <button className="btn-nav" onClick={nextQuestion}>
               {currentQ === activeQuestions.length - 1 ? "Submit Exam" : "Next"}
             </button>
@@ -764,7 +811,7 @@ export default function App() {
               {activeQuestions.map((_, i) => (
                 <div
                   key={i}
-                  className={`nav-item ${currentQ === i ? "active" : ""} ${userAnswers[i] !== null ? "answered" : ""}`}
+                  className={`nav-item ${currentQ === i ? "active" : ""} ${userAnswers[i] !== null ? "answered" : ""} ${flaggedQuestions[i] ? "flagged" : ""}`}
                   onClick={() => setCurrentQ(i)}
                 >
                   {i + 1}

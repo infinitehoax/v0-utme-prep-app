@@ -3,11 +3,12 @@ DROP TABLE IF EXISTS leaderboard CASCADE;
 
 -- Create leaderboard table for UTME app
 CREATE TABLE leaderboard (
-  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  id TEXT PRIMARY KEY,
   name TEXT NOT NULL UNIQUE,
   average_percentage DECIMAL(5, 2) NOT NULL,
   total_attempts INTEGER NOT NULL DEFAULT 1,
   last_attempt TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  device_token TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -26,6 +27,7 @@ CREATE POLICY "Allow public read" ON leaderboard
 CREATE POLICY "Allow public insert" ON leaderboard
   FOR INSERT WITH CHECK (true);
 
--- Allow public update
+-- Allow public update (only if device_token matches)
 CREATE POLICY "Allow public update" ON leaderboard
-  FOR UPDATE USING (true) WITH CHECK (true);
+  FOR UPDATE USING (device_token IS NULL OR device_token = current_setting('request.jwt.claims', true)->>'device_token')
+  WITH CHECK (true);
