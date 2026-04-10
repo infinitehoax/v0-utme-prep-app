@@ -522,6 +522,7 @@ export default function App() {
 
   // Tracks selected option index for each question
   const [userAnswers, setUserAnswers] = useState([]);
+  const [flaggedQuestions, setFlaggedQuestions] = useState([]);
   const [reviewAnswers, setReviewAnswers] = useState([]);
 
   const [leaderboard, setLeaderboard] = useState([]);
@@ -587,6 +588,7 @@ export default function App() {
     setCurrentQ(0);
     setScore(0);
     setUserAnswers(new Array(requestedAmount).fill(null));
+    setFlaggedQuestions(new Array(requestedAmount).fill(false));
     setTimeLeft(requestedAmount * 45);
     setScreen("quiz");
   };
@@ -613,6 +615,12 @@ export default function App() {
     const updatedAnswers = [...userAnswers];
     updatedAnswers[currentQ] = index;
     setUserAnswers(updatedAnswers);
+  };
+
+  const toggleFlag = () => {
+    const updatedFlags = [...flaggedQuestions];
+    updatedFlags[currentQ] = !updatedFlags[currentQ];
+    setFlaggedQuestions(updatedFlags);
   };
 
   const handleEndQuiz = async () => {
@@ -753,6 +761,9 @@ export default function App() {
 
           <div className="quiz-controls">
             <button className="btn-nav" onClick={prevQuestion} disabled={currentQ === 0}>Previous</button>
+            <button className="btn-flag" onClick={toggleFlag}>
+              {flaggedQuestions[currentQ] ? "Unflag" : "Flag"}
+            </button>
             <button className="btn-nav" onClick={nextQuestion}>
               {currentQ === activeQuestions.length - 1 ? "Submit Exam" : "Next"}
             </button>
@@ -764,7 +775,7 @@ export default function App() {
               {activeQuestions.map((_, i) => (
                 <div
                   key={i}
-                  className={`nav-item ${currentQ === i ? "active" : ""} ${userAnswers[i] !== null ? "answered" : ""}`}
+                  className={`nav-item ${currentQ === i ? "active" : ""} ${userAnswers[i] !== null ? "answered" : ""} ${flaggedQuestions[i] ? "flagged" : ""}`}
                   onClick={() => setCurrentQ(i)}
                 >
                   {i + 1}
