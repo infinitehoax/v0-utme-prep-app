@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { supabase } from "./supabaseClient"; 
 import "./App.css";
 
@@ -1017,6 +1017,7 @@ export default function App() {
   const [name, setName] = useState("");
   const [isNameLocked, setIsNameLocked] = useState(false);
   const [numQuestions, setNumQuestions] = useState(5);
+  const [selectedCategory, setSelectedCategory] = useState("Random");
   const [deviceToken, setDeviceToken] = useState("");
 
   const [activeQuestions, setActiveQuestions] = useState([]);
@@ -1111,12 +1112,19 @@ export default function App() {
     const passedIds = JSON.parse(localStorage.getItem("utme_passed_ids") || "[]");
     const failedIds = JSON.parse(localStorage.getItem("utme_failed_ids") || "[]");
 
-    let pool = allQuizData.filter(q => !passedIds.includes(q.id));
-    const requestedAmount = Math.min(Math.max(Number(numQuestions), 5), allQuizData.length);
+    let categoryPool = selectedCategory === "Random"
+      ? allQuizData
+      : allQuizData.filter(q => allCategoryData.find(c => c.id === q.id && c.chapter === selectedCategory));
+
+    let pool = categoryPool.filter(q => !passedIds.includes(q.id));
+    const requestedAmount = Math.min(Math.max(Number(numQuestions), 5), categoryPool.length);
 
     if (pool.length < requestedAmount) {
-      localStorage.setItem("utme_passed_ids", "[]");
-      pool = allQuizData;
+      // For selected categories, we might not want to reset ALL passed IDs globally,
+      // but the current app logic resets when pool is exhausted.
+      // However, resetting only for the category might be complex with the current global tracking.
+      // Let's stick to the current behavior but scoped to the category if possible.
+      pool = categoryPool;
     }
 
     const failedInPool = pool.filter(q => failedIds.includes(q.id));
@@ -1257,7 +1265,22 @@ export default function App() {
   };
 
   // Filter out only the wrong answers for the Review Screen
-  const wrongAnswers = reviewAnswers.filter(ans => ans.selectedAnswer !== ans.correctAnswer);
+  const wrongAnswers = useMemo(() =>
+    reviewAnswers.filter(ans => ans.selectedAnswer !== ans.correctAnswer),
+    [reviewAnswers]
+  );
+
+  const categories = useMemo(() =>
+    ["Random", ...new Set(allCategoryData.map(c => c.chapter))],
+    []
+  );
+
+  const filteredPool = useMemo(() =>
+    selectedCategory === "Random"
+      ? allQuizData
+      : allQuizData.filter(q => allCategoryData.find(c => c.id === q.id && c.chapter === selectedCategory)),
+    [selectedCategory]
+  );
 
   return (
     <div className="container">
@@ -1295,9 +1318,23 @@ export default function App() {
           </div>
 
           <div style={{ marginBottom: "20px", textAlign: "left" }}>
-            <label style={{ fontWeight: "600", color: "#333" }}>Select Number of Questions:</label>
-            <input type="number" min="5" max={allQuizData.length} value={numQuestions} onChange={(e) => setNumQuestions(e.target.value)} />
-            <small style={{ color: "#888" }}>Max available: {allQuizData.length} (Randomized)</small>
+            <label style={{ fontWeight: "600", color: "#333", display: "block", marginBottom: "5px" }}>Choose Category:</label>
+            <select
+              value={selectedCategory}
+              onChange={(e) => {
+                setSelectedCategory(e.target.value);
+                setNumQuestions(5);
+              }}
+              style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid #ddd", marginBottom: "15px" }}
+            >
+              {categories.map(cat => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
+
+            <label style={{ fontWeight: "600", color: "#333", display: "block", marginBottom: "5px" }}>Number of Questions:</label>
+            <input type="number" min="5" max={filteredPool.length} value={numQuestions} onChange={(e) => setNumQuestions(e.target.value)} />
+            <small style={{ color: "#888" }}>Max available for this selection: {filteredPool.length}</small>
           </div>
 
           <button onClick={startQuiz} disabled={loading}>
