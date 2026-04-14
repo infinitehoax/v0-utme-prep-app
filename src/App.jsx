@@ -529,6 +529,7 @@ export default function App() {
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(false);
   const [attemptResult, setAttemptResult] = useState(0);
+  const [passedCount, setPassedCount] = useState(0);
 
   useEffect(() => {
     // 1. Device Token Logic
@@ -549,6 +550,9 @@ export default function App() {
         localStorage.removeItem("utme_username_lock");
       }
     }
+
+    const passedIds = JSON.parse(localStorage.getItem("utme_passed_ids") || "[]");
+    setPassedCount(passedIds.length);
   }, []);
 
   useEffect(() => {
@@ -692,6 +696,7 @@ export default function App() {
 
     localStorage.setItem("utme_passed_ids", JSON.stringify([...passedIds]));
     localStorage.setItem("utme_failed_ids", JSON.stringify([...failedIds]));
+    setPassedCount(passedIds.size);
 
     const percentage = Number(((finalScore / activeQuestions.length) * 100).toFixed(2));
     setAttemptResult(percentage);
@@ -767,6 +772,24 @@ export default function App() {
           )}
 
           <input type="text" placeholder="Enter your full name..." value={name} onChange={(e) => setName(e.target.value)} disabled={isNameLocked} />
+
+          <div className="progress-section">
+            <div className="progress-label">
+              <span>Overall Progress</span>
+              <span>{passedCount} / {allQuizData.length} Mastered</span>
+            </div>
+            <div className="progress-bar-container">
+              <div
+                className="progress-bar-filler"
+                style={{ width: `${allQuizData.length > 0 ? (passedCount / allQuizData.length) * 100 : 0}%` }}
+              ></div>
+            </div>
+            <p className="progress-hype">
+              {passedCount === 0 ? "🚀 Start your journey today!" :
+               passedCount === allQuizData.length ? "👑 You are a Master! Keep it up!" :
+               "🔥 You're doing great! Keep pushing!"}
+            </p>
+          </div>
 
           <div style={{ marginBottom: "20px", textAlign: "left" }}>
             <label style={{ fontWeight: "600", color: "#333" }}>Select Number of Questions:</label>
