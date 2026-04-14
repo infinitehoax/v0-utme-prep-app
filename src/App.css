@@ -94,6 +94,14 @@ button:disabled {
   background: #00a042;
 }
 
+.btn-resume {
+  background: #673ab7;
+}
+
+.btn-resume:hover {
+  background: #5e35b1;
+}
+
 .btn-whatsapp {
   background: #25d366;
 }

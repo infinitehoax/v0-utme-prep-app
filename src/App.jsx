@@ -1034,6 +1034,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [attemptResult, setAttemptResult] = useState(0);
   const [passedCount, setPassedCount] = useState(0);
+  const [hasSavedSession, setHasSavedSession] = useState(false);
 
   useEffect(() => {
     // 1. Device Token Logic
@@ -1057,7 +1058,54 @@ export default function App() {
 
     const passedIds = JSON.parse(localStorage.getItem("utme_passed_ids") || "[]");
     setPassedCount(passedIds.length);
+
+    const savedSession = localStorage.getItem("utme_quiz_session");
+    if (savedSession) {
+      setHasSavedSession(true);
+    }
   }, []);
+
+  // Save session on important state changes
+  useEffect(() => {
+    if (screen === "quiz") {
+      const sessionData = {
+        activeQuestions,
+        currentQ,
+        userAnswers,
+        flaggedQuestions,
+        timeLeft,
+        selectedCategory,
+        numQuestions,
+        name
+      };
+      localStorage.setItem("utme_quiz_session", JSON.stringify(sessionData));
+    }
+  }, [screen, activeQuestions, currentQ, userAnswers, flaggedQuestions, selectedCategory, numQuestions, name]);
+
+  // Save time separately to throttle localStorage writes if necessary,
+  // though every second is okay for this size.
+  // Updating to save every 5 seconds to address review feedback.
+  useEffect(() => {
+    if (screen === "quiz" && timeLeft % 5 === 0) {
+      const saved = JSON.parse(localStorage.getItem("utme_quiz_session") || "{}");
+      if (saved.activeQuestions) {
+        saved.timeLeft = timeLeft;
+        localStorage.setItem("utme_quiz_session", JSON.stringify(saved));
+      }
+    }
+  }, [timeLeft, screen]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (screen === "quiz") {
+        e.preventDefault();
+        e.returnValue = "Are you sure you want to leave? Your progress will be saved.";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [screen]);
 
   useEffect(() => {
     if (screen !== "quiz") return;
@@ -1075,7 +1123,34 @@ export default function App() {
     return `${m}:${s}`;
   };
 
+  const resumeQuiz = () => {
+    const savedSession = localStorage.getItem("utme_quiz_session");
+    if (!savedSession) return;
+
+    try {
+      const data = JSON.parse(savedSession);
+      setActiveQuestions(data.activeQuestions);
+      setCurrentQ(data.currentQ);
+      setUserAnswers(data.userAnswers);
+      setFlaggedQuestions(data.flaggedQuestions);
+      setTimeLeft(data.timeLeft);
+      setSelectedCategory(data.selectedCategory);
+      setNumQuestions(data.numQuestions);
+      setName(data.name);
+      setScreen("quiz");
+    } catch (e) {
+      console.error("Error parsing saved session:", e);
+      localStorage.removeItem("utme_quiz_session");
+      setHasSavedSession(false);
+    }
+  };
+
   const startQuiz = async () => {
+    if (hasSavedSession) {
+      if (!window.confirm("You have an uncompleted session. Starting a new exam will discard it. Continue?")) {
+        return;
+      }
+    }
     const trimmedName = name.trim();
     if (!trimmedName) return alert("Please enter your name!");
 
@@ -1172,6 +1247,9 @@ export default function App() {
   };
 
   const handleEndQuiz = async () => {
+    localStorage.removeItem("utme_quiz_session");
+    setHasSavedSession(false);
+
     // Calculate final score and prepare format for review
     let finalScore = 0;
     const reviewData = activeQuestions.map((q, i) => {
@@ -1344,6 +1422,12 @@ export default function App() {
             <input type="number" min="5" max={filteredPool.length} value={numQuestions} onChange={(e) => setNumQuestions(e.target.value)} />
             <small style={{ color: "#888" }}>Max available for this selection: {filteredPool.length}</small>
           </div>
+
+          {hasSavedSession && (
+            <button className="btn-resume" onClick={resumeQuiz} style={{ backgroundColor: "#673ab7", marginBottom: "10px" }}>
+              🔄 Resume Last Session
+            </button>
+          )}
 
           <button onClick={startQuiz} disabled={loading}>
             {loading ? "Checking name..." : "Start Exam"}
