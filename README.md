@@ -1,35 +1,44 @@
-# v0-utme-prep-app
+# UTME Mock Exam - The Lekki Headmaster
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v0.app).
+An interactive quiz application designed to help students prepare for the UTME exam using the novel "The Lekki Headmaster".
 
-## Built with v0
+## Features
 
-This repository is linked to a [v0](https://v0.app) project. You can continue developing by visiting the link below -- start new chats to make changes, and v0 will push commits directly to this repo. Every merge to `main` will automatically deploy.
+- **Interactive Quiz:** Test your knowledge with hundreds of questions based on the book's chapters.
+- **Category Filtering:** Focus your study by selecting specific chapters or take a random mix of questions.
+- **Mastery Tracking:** Keep track of your progress with persistent mastery counts stored locally.
+- **Global Leaderboard:** Compete with other students and see your average percentage ranking globally.
+- **Question Navigator:** Easily navigate through questions and flag those you want to revisit.
+- **WhatsApp Sharing:** Share your scores and challenge friends to beat your performance.
+- **PDF Summary:** Access a curated PDF summary with key details for quick revision.
 
-[Continue working on v0 →](https://v0.app/chat/projects/prj_rrbhtKM5Ot4lz9lX68zLhrCimMiq)
+## Built With
+
+- **React:** For a dynamic and responsive user interface.
+- **Vite:** As the build tool and development server.
+- **Supabase:** For backend services and global leaderboard management.
+- **pnpm:** For efficient package management.
 
 ## Getting Started
 
-First, run the development server:
+First, ensure you have [pnpm](https://pnpm.io/) installed.
+
+To run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:5173](http://localhost:5173) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To build for production:
 
-## Learn More
+```bash
+pnpm build
+```
 
-To learn more, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [v0 Documentation](https://v0.app/docs) - learn about v0 and how to use it.
+This project is configured for deployment on Vercel. Every merge to `main` will automatically deploy.
 
-<a href="https://v0.app/chat/api/kiro/clone/infinitehoax/v0-utme-prep-app" alt="Open in Kiro"><img src="https://pdgvvgmkdvyeydso.public.blob.vercel-storage.com/open%20in%20kiro.svg?sanitize=true" /></a>
+Live version: [https://v0-utme-lekki.vercel.app/](https://v0-utme-lekki.vercel.app/)
