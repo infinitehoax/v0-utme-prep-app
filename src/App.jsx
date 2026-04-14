@@ -1117,15 +1117,9 @@ export default function App() {
       : allQuizData.filter(q => allCategoryData.find(c => c.id === q.id && c.chapter === selectedCategory));
 
     let pool = categoryPool.filter(q => !passedIds.includes(q.id));
-    const requestedAmount = Math.min(Math.max(Number(numQuestions), 5), categoryPool.length);
+    if (pool.length === 0) pool = categoryPool;
 
-    if (pool.length < requestedAmount) {
-      // For selected categories, we might not want to reset ALL passed IDs globally,
-      // but the current app logic resets when pool is exhausted.
-      // However, resetting only for the category might be complex with the current global tracking.
-      // Let's stick to the current behavior but scoped to the category if possible.
-      pool = categoryPool;
-    }
+    const requestedAmount = Math.min(Math.max(Number(numQuestions), 5), pool.length);
 
     const failedInPool = pool.filter(q => failedIds.includes(q.id));
     const freshInPool = pool.filter(q => !failedIds.includes(q.id));
@@ -1275,12 +1269,27 @@ export default function App() {
     []
   );
 
-  const filteredPool = useMemo(() =>
-    selectedCategory === "Random"
+  const poolInfo = useMemo(() => {
+    const passedIds = JSON.parse(localStorage.getItem("utme_passed_ids") || "[]");
+    const categoryPool = selectedCategory === "Random"
       ? allQuizData
-      : allQuizData.filter(q => allCategoryData.find(c => c.id === q.id && c.chapter === selectedCategory)),
-    [selectedCategory]
-  );
+      : allQuizData.filter(q => allCategoryData.find(c => c.id === q.id && c.chapter === selectedCategory));
+
+    const unanswered = categoryPool.filter(q => !passedIds.includes(q.id));
+    return {
+      questions: unanswered.length > 0 ? unanswered : categoryPool,
+      isMastered: unanswered.length === 0,
+      unansweredCount: unanswered.length,
+      totalCount: categoryPool.length
+    };
+  }, [selectedCategory, passedCount]);
+
+  useEffect(() => {
+    const max = poolInfo.questions.length;
+    if (numQuestions > max) {
+      setNumQuestions(max);
+    }
+  }, [poolInfo.questions.length]);
 
   return (
     <div className="container">
@@ -1341,8 +1350,18 @@ export default function App() {
             </select>
 
             <label style={{ fontWeight: "600", color: "#333", display: "block", marginBottom: "5px" }}>Number of Questions:</label>
-            <input type="number" min="5" max={filteredPool.length} value={numQuestions} onChange={(e) => setNumQuestions(e.target.value)} />
-            <small style={{ color: "#888" }}>Max available for this selection: {filteredPool.length}</small>
+            <input
+              type="number"
+              min={Math.min(5, poolInfo.questions.length)}
+              max={poolInfo.questions.length}
+              value={numQuestions}
+              onChange={(e) => setNumQuestions(e.target.value)}
+            />
+            <small style={{ color: "#888" }}>
+              {poolInfo.isMastered
+                ? `Category Mastered! Reviewing all ${poolInfo.totalCount} questions.`
+                : `Max available (unanswered): ${poolInfo.unansweredCount} (out of ${poolInfo.totalCount})`}
+            </small>
           </div>
 
           <button onClick={startQuiz} disabled={loading}>
