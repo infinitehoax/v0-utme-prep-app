@@ -1289,6 +1289,14 @@ export default function App() {
         <>
           <h1>UTME Mock Exam</h1>
           <h2>The Lekki Headmaster</h2>
+
+          <div className="notification-banner">
+            📖 <strong>JAMB Special:</strong> Get the summarized story with key details that JAMB loves!
+            <a href="https://litter.catbox.moe/9e1xdbq321r9bj6i.pdf" target="_blank" rel="noopener noreferrer" style={{ marginLeft: "5px", color: "#e65100", fontWeight: "bold" }}>
+              Download PDF Summary
+            </a>
+          </div>
+
           {isNameLocked ? (
             <p style={{ color: "#d32f2f", fontWeight: "bold", fontSize: "0.9rem" }}>
               🔒 Your name is locked to this device for 15 days.
