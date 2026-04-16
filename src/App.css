@@ -222,8 +222,18 @@ th {
   top: 0;
 }
 
-tr:nth-child(1) {
-  background: #fff8e1;
+.rank-gold {
+  background: #fff9c4 !important; /* Lighter gold background */
+  font-weight: bold;
+}
+
+.rank-silver {
+  background: #f5f5f5 !important; /* Silver/Grey background */
+  font-weight: bold;
+}
+
+.rank-bronze {
+  background: #efebe9 !important; /* Bronze/Light brown background */
   font-weight: bold;
 }
 
