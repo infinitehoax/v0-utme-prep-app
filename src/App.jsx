@@ -1556,14 +1556,30 @@ export default function App() {
                   <tr><th>Rank</th><th>Name</th><th>Avg %</th><th>Attempts</th></tr>
                 </thead>
                 <tbody>
-                  {leaderboard.map((entry, index) => (
-                    <tr key={index}>
-                      <td>#{index + 1}</td>
-                      <td>{entry.name}</td>
-                      <td style={{ color: "#00c853", fontWeight: "bold" }}>{entry.average_percentage}%</td>
-                      <td style={{ textAlign: "center" }}>{entry.total_attempts}</td>
-                    </tr>
-                  ))}
+                  {leaderboard.map((entry, index) => {
+                    const rank = index + 1;
+                    let rankClass = "";
+                    let medal = "";
+                    if (rank === 1) {
+                      rankClass = "rank-gold";
+                      medal = "🥇 ";
+                    } else if (rank === 2) {
+                      rankClass = "rank-silver";
+                      medal = "🥈 ";
+                    } else if (rank === 3) {
+                      rankClass = "rank-bronze";
+                      medal = "🥉 ";
+                    }
+
+                    return (
+                      <tr key={index} className={rankClass}>
+                        <td>{medal}#{rank}</td>
+                        <td>{entry.name}</td>
+                        <td style={{ color: "#00c853", fontWeight: "bold" }}>{entry.average_percentage}%</td>
+                        <td style={{ textAlign: "center" }}>{entry.total_attempts}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
