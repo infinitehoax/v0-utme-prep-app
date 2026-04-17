@@ -1597,7 +1597,7 @@ export default function App() {
 
           <div className="notification-banner">
             📖 <strong>JAMB Special:</strong> Get the summarized story with key details that JAMB loves!
-            <a href="https://files.catbox.moe/xictvr.pdf" target="_blank" rel="noopener noreferrer" style={{ marginLeft: "5px", color: "#e65100", fontWeight: "bold" }}>
+            <a href="https://github.com/infinitehoax/v0-utme-prep-app/raw/refs/heads/main/public/lekki_headmaster.pdf" target="_blank" rel="noopener noreferrer" style={{ marginLeft: "5px", color: "#e65100", fontWeight: "bold" }}>
               Download PDF Summary
             </a>
           </div>
