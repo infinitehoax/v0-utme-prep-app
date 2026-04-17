@@ -629,6 +629,48 @@ const allQuizData = [
     options: ["A) Traveling abroad guarantees instant wealth and happiness", "B) Migration is a seamless process for all professionals", "C) It is not a bed of roses; it involves harsh realities, menial jobs, and unexpected sacrifices", "D) Only doctors and nurses succeed abroad"],
     answer: 2,
     explanation: "Bepo's reflections on people like Akindele (doing 12-hour shifts), the banker washing the elderly, and the Ignatius family's broken marriage prove the overarching theme that the grass is not always greener on the other side. (Pages 16-18)"
+  },
+  {
+    id: 519,
+    question: "Based on his actions and final decision in the story, Bepo can best be described as a:",
+    options: ["A) Traitor", "B) Patriot", "C) Coward", "D) Capitalist"],
+    answer: 1,
+    explanation: "The entire novel contrasts the 'Japa' syndrome with patriotism. While others were eager to abandon Nigeria for foreign currencies, Bepo loved his country, wanted to help build it, and ultimately abandoned his flight to London, declaring, 'My heart is here!' (Page 63)."
+  },
+  {
+    id: 520,
+    question: "How much of the Stardom Cooperative Society's funds had been loaned out to the staff before the MD found out?",
+    options: ["A) N250,000", "B) N10 million", "C) Over N50 million", "D) N95 million"],
+    answer: 2,
+    explanation: "During the board meeting, it was revealed that while the cooperative's purse held N95 million in total, over N50 million of that money had already been given out as loans to the staff to buy cars. (Page 26)."
+  },
+  {
+    id: 521,
+    question: "Which character in the novel faced a 36-month detention and trial over alleged misappropriation of funds, but was not found directly guilty?",
+    options: ["A) Chief Didi Ogba", "B) Mr. Egi Meko", "C) Mr. Nku", "D) Mr. Ibe Ignatius"],
+    answer: 0,
+    explanation: "Tosh's father, Chief Didi Ogba, spent 36 months in detention facing trial for the alleged misappropriation of a N2.5 billion government contract. However, the court later ruled that he was not directly guilty. (Page 42-43)."
+  },
+  {
+    id: 522,
+    question: "Bepo has two children with his wife, Seri. What are their genders?",
+    options: ["A) A boy and a girl", "B) Two boys", "C) Two girls", "D) Three girls"],
+    answer: 2,
+    explanation: "Bepo’s two children are named Nike and Kike (Page 10, 15). These are traditionally female Yoruba names, and the text specifically refers to Nike as a 'daughter' when discussing her university fees. Thus, they are two girls."
+  },
+  {
+    id: 523,
+    question: "During the morning assembly, before Principal Bepo was invited to take the floor, who delivered the pep talk to the students?",
+    options: ["A) Angel, the Chapel Prefect", "B) Mrs. Grace Apeh", "C) Ikenna Egbu", "D) Banky"],
+    answer: 2,
+    explanation: "Right before Bepo took the microphone and started weeping, an SSS 1 student and poet named Ikenna Egbu mounted the podium and delivered a captivating pep talk narrating his excursion experience to Jos, Plateau State. (Page 5-6)."
+  },
+  {
+    id: 524,
+    question: "Who discovered the expensive cars secretly parked by the staff at the school's back gate?",
+    options: ["A) Chief Mrs. Solape Bayo", "B) Jombo, the security guard", "C) Mr. Jeremi Amos", "D) Mrs. Ibidun Gloss (The MD)"],
+    answer: 3,
+    explanation: "During the long break, the Managing Director (Mrs. Ibidun Gloss) took a walk to inspect a piece of land Stardom acquired near the back gate. There, she was shocked to discover that her teachers were hiding their luxury cars from the management. (Page 24-25)."
   }
 ];
 
@@ -1150,7 +1192,13 @@ const allCategoryData = [
   { "id": 515, "chapter": "JAMB Recalled Questions" },
   { "id": 516, "chapter": "JAMB Recalled Questions" },
   { "id": 517, "chapter": "JAMB Recalled Questions" },
-  { "id": 518, "chapter": "JAMB Recalled Questions" }
+  { "id": 518, "chapter": "JAMB Recalled Questions" },
+  { "id": 519, "chapter": "JAMB Recalled Questions" },
+  { "id": 520, "chapter": "JAMB Recalled Questions" },
+  { "id": 521, "chapter": "JAMB Recalled Questions" },
+  { "id": 522, "chapter": "JAMB Recalled Questions" },
+  { "id": 523, "chapter": "JAMB Recalled Questions" },
+  { "id": 524, "chapter": "JAMB Recalled Questions" }
 ];
 
 const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
@@ -1556,7 +1604,10 @@ export default function App() {
 
           <button
             className="btn-jamb-prominent"
-            onClick={() => setShowJambModal(true)}
+            onClick={() => {
+              setSelectedCategory("JAMB Recalled Questions");
+              setShowJambModal(true);
+            }}
           >
             ⭐ Actual JAMB Questions (Past Questions)
           </button>
@@ -1635,9 +1686,14 @@ export default function App() {
               <div className="modal-content">
                 <h3>Actual JAMB Questions</h3>
                 <p>These are some of the questions that JAMBites were asked earlier and have been recreated here.</p>
+                <p style={{ fontSize: "0.9rem", color: "#666", marginBottom: "15px" }}>
+                  {poolInfo.isMastered
+                    ? `Category Mastered! Reviewing all ${poolInfo.totalCount} questions.`
+                    : `Available (unanswered): ${poolInfo.unansweredCount} (out of ${poolInfo.totalCount})`}
+                </p>
                 <div style={{ display: "flex", gap: "10px" }}>
                   <button className="btn-secondary" onClick={() => setShowJambModal(false)}>Close</button>
-                  <button onClick={() => startQuiz("JAMB Recalled Questions", 18)}>Let me test</button>
+                  <button onClick={() => startQuiz("JAMB Recalled Questions", numQuestions)}>Let me test</button>
                 </div>
               </div>
             </div>
@@ -1708,6 +1764,13 @@ export default function App() {
         <>
           <h1>Review Answers</h1>
           <div className="review-list">
+            <div className="notification-banner" style={{ marginBottom: "20px", textAlign: "left" }}>
+              💡 <strong>Teacher's Advice for JAMBites:</strong>
+              <p style={{ margin: "5px 0 0 0", fontSize: "0.9rem" }}>
+                Tell your peers to pay very close attention to <strong>names, amounts of money, and locations</strong>. As you can see from these recalled questions, JAMB examiners for <em>The Lekki Headmaster</em> are heavily testing candidates' abilities to remember specific details (like the exact amount loaned out, the genders of Bepo's kids, and the names of minor characters like Chief Ogba and Ikenna).
+              </p>
+            </div>
+
             {wrongAnswers.length === 0 ? (
               <p style={{ textAlign: "center", fontWeight: "bold", color: "#00c853", marginTop: "20px" }}>
                 🎉 Perfect Score! You got everything right.
