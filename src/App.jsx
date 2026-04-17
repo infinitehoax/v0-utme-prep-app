@@ -1556,7 +1556,10 @@ export default function App() {
 
           <button
             className="btn-jamb-prominent"
-            onClick={() => setShowJambModal(true)}
+            onClick={() => {
+              setSelectedCategory("JAMB Recalled Questions");
+              setShowJambModal(true);
+            }}
           >
             ⭐ Actual JAMB Questions (Past Questions)
           </button>
@@ -1635,9 +1638,14 @@ export default function App() {
               <div className="modal-content">
                 <h3>Actual JAMB Questions</h3>
                 <p>These are some of the questions that JAMBites were asked earlier and have been recreated here.</p>
+                <p style={{ fontSize: "0.9rem", fontWeight: "bold", color: "#1a237e" }}>
+                  {poolInfo.isMastered
+                    ? `You've mastered all ${poolInfo.totalCount} recalled questions! 🎉`
+                    : `Available: ${poolInfo.unansweredCount} new questions out of ${poolInfo.totalCount}.`}
+                </p>
                 <div style={{ display: "flex", gap: "10px" }}>
                   <button className="btn-secondary" onClick={() => setShowJambModal(false)}>Close</button>
-                  <button onClick={() => startQuiz("JAMB Recalled Questions", 18)}>Let me test</button>
+                  <button onClick={() => startQuiz("JAMB Recalled Questions")}>Let me test</button>
                 </div>
               </div>
             </div>
