@@ -1379,7 +1379,7 @@ export default function App() {
 
           <div className="notification-banner">
             📖 <strong>JAMB Special:</strong> Get the summarized story with key details that JAMB loves!
-            <a href="https://litter.catbox.moe/9e1xdbq321r9bj6i.pdf" target="_blank" rel="noopener noreferrer" style={{ marginLeft: "5px", color: "#e65100", fontWeight: "bold" }}>
+            <a href="https://files.catbox.moe/xictvr.pdf" target="_blank" rel="noopener noreferrer" style={{ marginLeft: "5px", color: "#e65100", fontWeight: "bold" }}>
               Download PDF Summary
             </a>
           </div>
