@@ -237,6 +237,12 @@ th {
   font-weight: bold;
 }
 
+.rank-user {
+  background: #e3f2fd !important;
+  border-left: 4px solid #2196f3;
+  font-weight: bold;
+}
+
 /* Review Screen Styling */
 .review-list {
   max-height: 400px;
