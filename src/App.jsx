@@ -1312,6 +1312,9 @@ export default function App() {
         last_attempt: new Date().toISOString(),
         device_token: deviceToken
       });
+
+      // Clear leaderboard cache so the next view gets fresh data
+      localStorage.removeItem("utme_leaderboard_cache");
     } catch (e) {
       console.error("Critical error saving to Supabase:", e);
     }
@@ -1320,10 +1323,28 @@ export default function App() {
 
   const fetchLeaderboard = async () => {
     setScreen("leaderboard");
+
+    // Check Cache
+    const cached = localStorage.getItem("utme_leaderboard_cache");
+    if (cached) {
+      const { data, timestamp } = JSON.parse(cached);
+      const now = new Date().getTime();
+      if (now - timestamp < 5 * 60 * 1000) { // 5 minutes cache
+        setLeaderboard(data);
+        return;
+      }
+    }
+
     setLoading(true);
     try {
       const { data } = await supabase.from('leaderboard').select('*').order('average_percentage', { ascending: false });
-      if (data) setLeaderboard(data);
+      if (data) {
+        setLeaderboard(data);
+        localStorage.setItem("utme_leaderboard_cache", JSON.stringify({
+          data,
+          timestamp: new Date().getTime()
+        }));
+      }
     } catch (e) {
       console.error("Error fetching from Supabase:", e);
     }
