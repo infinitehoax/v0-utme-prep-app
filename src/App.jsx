@@ -503,8 +503,133 @@ const allQuizData = [
   { id: 497, question: "How much did Stardom Schools pay as a fine to Emirates airline to shift Bepo's flight by a week?", options: ["A) $50", "B) $100", "C) $150", "D) $200"], answer: 1 },
   { id: 498, question: "During the comedy skits, students recalled Bepo's famous saying: 'If you say education is too expensive...'", options: ["A) '...try ignorance!'", "B) '...try business!'", "C) '...try illiteracy!'", "D) '...try farming!'"], answer: 0 },
   { id: 499, question: "During the cultural dances, which instrument was notably unavailable, forcing the Bata dancers to improvise with the djembe?", options: ["A) The talking drum", "B) The Bata drum", "C) The Ogene", "D) The flute"], answer: 1 },
-  { id: 500, question: "At the airport on his final day, what time did the check-in process start for Bepo's flight?", options: ["A) 4:00 pm", "B) 5:00 pm", "C) 5:30 pm", "D) 8:00 pm"], answer: 2 }
-  // ... Add the rest of your questions here
+  { id: 500, question: "At the airport on his final day, what time did the check-in process start for Bepo's flight?", options: ["A) 4:00 pm", "B) 5:00 pm", "C) 5:30 pm", "D) 8:00 pm"], answer: 2 },
+  {
+    id: 501,
+    question: "In 'The Lekki Headmaster', who was Bibi afraid of?",
+    options: ["A) Mr. Bepo", "B) Mr. Audu", "C) Mr. Ayesoro (Mr. Wala)", "D) Mr. Justus Anabel"],
+    answer: 2,
+    explanation: "Bibi Ladele had severe nightmares and screamed out of fear because of her Government teacher, Mr. Ayesoro, due to the deep, wild tribal marks on his face. (Page 22)"
+  },
+  {
+    id: 502,
+    question: "Who was Sola's husband in the UK?",
+    options: ["A) A doctor working in a London hospital", "B) A student pursuing his Master's degree", "C) An accountant who was abandoned by his wife", "D) A freight loader working 12-hour shifts"],
+    answer: 1,
+    explanation: "Sola (the former Home Economics teacher) revealed that she was working as a nurse/caregiver to support her family while her husband was pursuing his Master's degree. (Page 15)"
+  },
+  {
+    id: 503,
+    question: "What was Bepo’s first occupation?",
+    options: ["A) A commercial transporter", "B) A trained teacher", "C) A bank manager", "D) A journalist"],
+    answer: 1,
+    explanation: "Bepo has always been a trained teacher. He studied English/History Education at the University of Benin and immediately started his professional teaching career (and co-founded Fruitful Future) shortly after his NYSC. (Page 12, 38)"
+  },
+  {
+    id: 504,
+    question: "What does the term “Japa” mean in the context of the novel?",
+    options: ["A) To steal money and run away", "B) The desperation to emigrate or relocate abroad for greener pastures", "C) A traditional Yoruba dance", "D) The act of avoiding traffic in Lagos"],
+    answer: 1,
+    explanation: "Throughout the book, 'Japa' is the central theme, referring to the mass exodus of Nigerians migrating to countries like the UK, USA, and Canada."
+  },
+  {
+    id: 505,
+    question: "Which school did Bepo co-found/work in during his early years?",
+    options: ["A) Beesway Group of School", "B) Legacy Memorial Hospital", "C) Fruitful Future School", "D) Royal Ambassador School"],
+    answer: 2,
+    explanation: "Shortly after his NYSC, Bepo and a colleague rented a two-bedroom flat and set up a neighbourhood school called Fruitful Future, which eventually collapsed due to bad roads and ruptured water pipes. (Page 38) (Note: If the options exclude Fruitful Future, the answer would be Beesway Group of School, where he worked immediately before Stardom)."
+  },
+  {
+    id: 506,
+    question: "Who pays for Bepo’s children's (specifically, the daughter's) university fees?",
+    options: ["A) Mr. Bepo", "B) Bepo's wife, Seri", "C) The Stardom Cooperative Society", "D) The UK Government"],
+    answer: 1,
+    explanation: "While basic education was free in the UK, Bepo's daughter, Nike, had to pay fees when she entered the university. The text states: 'His wife did wonderfully in this wise as she paid the bulk of the fees.' (Page 15)"
+  },
+  {
+    id: 507,
+    question: "In 'The Lekki Headmaster', who is Chidi (Chido) and what is he prominently known for?",
+    options: ["A) The chapel prefect who handed Bepo the microphone", "B) Stardom's talented goalkeeper invited to the national Under-17 team", "C) The student who insulted Tosh's father", "D) Bepo's landlord's grandson"],
+    answer: 1,
+    explanation: "During the farewell novelty match, Chido (Chidi) was so good at goalkeeping that the text notes he had been invited to the country's Under-17 team. (Page 54)"
+  },
+  {
+    id: 508,
+    question: "In 'The Lekki Headmaster', what business did some workers at Stardom School try and fail at?",
+    options: ["A) Poultry farming", "B) Commercial transportation", "C) Running a creche", "D) Real estate"],
+    answer: 1,
+    explanation: "When Bepo was considering retirement businesses, he noted that at least three staff members at Stardom ventured into commercial transportation but regretted it because drivers defaulted and mechanics defrauded them. (Page 11)"
+  },
+  {
+    id: 509,
+    question: "In 'The Lekki Headmaster', who said: “where are these staff getting the money to buy all these cars?”",
+    options: ["A) Chief Mrs. Solape Bayo", "B) Mr. Jeremi Amos (The Accountant)", "C) Mrs. Ibidun Gloss (The MD)", "D) Principal Bepo"],
+    answer: 2,
+    explanation: "The Managing Director, Mrs. Ibidun Gloss, asked this furiously when she discovered the secret parking lot filled with expensive cars owned by her teachers. (Page 25)"
+  },
+  {
+    id: 510,
+    question: "Where was Bepo living during the incident of his neighbor that poured him a bowl of elubo?",
+    options: ["A) Adeniyi Jones, Ikeja", "B) A crowded face-me-I-face-you house in Iyana Ipaja", "C) A mini-flat in Sango", "D) The staff quarters in Ojikutu"],
+    answer: 1,
+    explanation: "During his period of joblessness, Bepo lived in a 'face-me-I-face-you' apartment in Iyana Ipaja, where Iya Mathew poured elubo (cassava powder) on him for spending the NEPA bill. (Page 28)"
+  },
+  {
+    id: 511,
+    question: "In 'The Lekki Headmaster', how much did the school cooperative lend out to staff?",
+    options: ["A) Over N50 million", "B) N95 million", "C) N2 million", "D) N250,000"],
+    answer: 0,
+    explanation: "The cooperative purse had N95 million in total, but over N50 million of it had been loaned out to the staff to buy cars. (Page 26)"
+  },
+  {
+    id: 512,
+    question: "In 'The Lekki Headmaster', how many years remained for Mr. Bepo to retire?",
+    options: ["A) Two years", "B) Four years", "C) Five years", "D) Ten years"],
+    answer: 1,
+    explanation: "Bepo planned to retire at the age of 55. The text states he was 51, meaning retirement was exactly four years away. (Page 10)"
+  },
+  {
+    id: 513,
+    question: "In 'The Lekki Headmaster', who made the statement: \"It's like hanging a snake in the roof and going to bed\"?",
+    options: ["A) Mr. Audu", "B) Mrs. Ibidun Gloss", "C) Chief Mrs. Solape Bayo", "D) Mr. Egi Meko"],
+    answer: 2,
+    explanation: "The MD's mother and Chairman of the Board, Chief Mrs. Solape Bayo, said this to describe the danger of leaving N95 million in the hands of the staff cooperative. (Page 26)"
+  },
+  {
+    id: 514,
+    question: "In 'The Lekki Headmaster', Bibi was scared of Mr. Ayesoro because?",
+    options: ["A) He caned students mercilessly", "B) Of the deep tribal marks he flaunted", "C) He always shouted at her in Government class", "D) He threatened to fail her"],
+    answer: 1,
+    explanation: "Bibi had nightmares because of his wild facial tribal marks. (Page 22)"
+  },
+  {
+    id: 515,
+    question: "How many children does Bepo have? And what are their genders?",
+    options: ["A) A boy and a girl", "B) Two girls", "C) Two boys", "D) One boy and two girls"],
+    answer: 1,
+    explanation: "Bepo has two children, Nike and Kike, both of whom are girls. (Page 10)"
+  },
+  {
+    id: 516,
+    question: "In 'The Lekki Headmaster', what was the challenge people faced in general hospitals?",
+    options: ["A) Lack of electricity and water", "B) Large crowds, overwhelmed doctors, inefficiency, and corruption", "C) Unqualified nurses", "D) High cost of medical bills"],
+    answer: 1,
+    explanation: "When discussing Mrs. Ladele's preference for private healthcare, the text notes that people dreaded general (government) hospitals due to the massive crowds, inefficiency, and corruption. (Page 22)"
+  },
+  {
+    id: 517,
+    question: "In 'The Lekki Headmaster', the Government teacher was called \"Owala\" because?",
+    options: ["A) He walked with a limp", "B) It is a derogatory Yoruba appellation for a person with wild facial marks", "C) He was from Owala village", "D) He was very strict"],
+    answer: 1,
+    explanation: "The students nicknamed Mr. Ayesoro 'Mr. Owala' strictly because of his deep tribal marks. (Page 22)"
+  },
+  {
+    id: 518,
+    question: "Regarding the characters who decided to \"japa\" (emigrate), the overarching message portrayed is that?",
+    options: ["A) Traveling abroad guarantees instant wealth and happiness", "B) Migration is a seamless process for all professionals", "C) It is not a bed of roses; it involves harsh realities, menial jobs, and unexpected sacrifices", "D) Only doctors and nurses succeed abroad"],
+    answer: 2,
+    explanation: "Bepo's reflections on people like Akindele (doing 12-hour shifts), the banker washing the elderly, and the Ignatius family's broken marriage prove the overarching theme that the grass is not always greener on the other side. (Pages 16-18)"
+  }
 ];
 
 const allCategoryData = [
@@ -1007,7 +1132,25 @@ const allCategoryData = [
   { "id": 497, "chapter": "Chapter 11" },
   { "id": 498, "chapter": "Chapter 11" },
   { "id": 499, "chapter": "Chapter 11" },
-  { "id": 500, "chapter": "Chapter 12" }
+  { "id": 500, "chapter": "Chapter 12" },
+  { "id": 501, "chapter": "JAMB Recalled Questions" },
+  { "id": 502, "chapter": "JAMB Recalled Questions" },
+  { "id": 503, "chapter": "JAMB Recalled Questions" },
+  { "id": 504, "chapter": "JAMB Recalled Questions" },
+  { "id": 505, "chapter": "JAMB Recalled Questions" },
+  { "id": 506, "chapter": "JAMB Recalled Questions" },
+  { "id": 507, "chapter": "JAMB Recalled Questions" },
+  { "id": 508, "chapter": "JAMB Recalled Questions" },
+  { "id": 509, "chapter": "JAMB Recalled Questions" },
+  { "id": 510, "chapter": "JAMB Recalled Questions" },
+  { "id": 511, "chapter": "JAMB Recalled Questions" },
+  { "id": 512, "chapter": "JAMB Recalled Questions" },
+  { "id": 513, "chapter": "JAMB Recalled Questions" },
+  { "id": 514, "chapter": "JAMB Recalled Questions" },
+  { "id": 515, "chapter": "JAMB Recalled Questions" },
+  { "id": 516, "chapter": "JAMB Recalled Questions" },
+  { "id": 517, "chapter": "JAMB Recalled Questions" },
+  { "id": 518, "chapter": "JAMB Recalled Questions" }
 ];
 
 const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
@@ -1018,6 +1161,7 @@ export default function App() {
   const [isNameLocked, setIsNameLocked] = useState(false);
   const [numQuestions, setNumQuestions] = useState(5);
   const [selectedCategory, setSelectedCategory] = useState("Random");
+  const [showExplanations, setShowExplanations] = useState({});
   const [deviceToken, setDeviceToken] = useState("");
 
   const [activeQuestions, setActiveQuestions] = useState([]);
@@ -1031,6 +1175,7 @@ export default function App() {
   const [reviewAnswers, setReviewAnswers] = useState([]);
 
   const [leaderboard, setLeaderboard] = useState([]);
+  const [showJambModal, setShowJambModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [attemptResult, setAttemptResult] = useState(0);
   const [passedCount, setPassedCount] = useState(0);
@@ -1145,12 +1290,13 @@ export default function App() {
     }
   };
 
-  const startQuiz = async () => {
+  const startQuiz = async (overrideCategory = null, overrideCount = null) => {
     if (hasSavedSession) {
       if (!window.confirm("You have an uncompleted session. Starting a new exam will discard it. Continue?")) {
         return;
       }
     }
+    setShowJambModal(false);
     const trimmedName = name.trim();
     if (!trimmedName) return alert("Please enter your name!");
 
@@ -1187,14 +1333,16 @@ export default function App() {
     const passedIds = JSON.parse(localStorage.getItem("utme_passed_ids") || "[]");
     const failedIds = JSON.parse(localStorage.getItem("utme_failed_ids") || "[]");
 
-    let categoryPool = selectedCategory === "Random"
+    const category = overrideCategory || selectedCategory;
+    let categoryPool = category === "Random"
       ? allQuizData
-      : allQuizData.filter(q => allCategoryData.find(c => c.id === q.id && c.chapter === selectedCategory));
+      : allQuizData.filter(q => allCategoryData.find(c => c.id === q.id && c.chapter === category));
 
     let pool = categoryPool.filter(q => !passedIds.includes(q.id));
     if (pool.length === 0) pool = categoryPool;
 
-    const requestedAmount = Math.min(Math.max(Number(numQuestions), 5), pool.length);
+    const count = overrideCount || numQuestions;
+    const requestedAmount = Math.min(Math.max(Number(count), 5), pool.length);
 
     const failedInPool = pool.filter(q => failedIds.includes(q.id));
     const freshInPool = pool.filter(q => !failedIds.includes(q.id));
@@ -1255,7 +1403,8 @@ export default function App() {
         question: q.question,
         options: q.options,
         correctAnswer: q.answer,
-        selectedAnswer: selectedAnswer
+        selectedAnswer: selectedAnswer,
+        explanation: q.explanation
       };
     });
 
@@ -1405,6 +1554,13 @@ export default function App() {
             </a>
           </div>
 
+          <button
+            className="btn-jamb-prominent"
+            onClick={() => setShowJambModal(true)}
+          >
+            ⭐ Actual JAMB Questions (Past Questions)
+          </button>
+
           {isNameLocked ? (
             <p style={{ color: "#d32f2f", fontWeight: "bold", fontSize: "0.9rem" }}>
               🔒 Your name is locked to this device for 15 days.
@@ -1469,10 +1625,23 @@ export default function App() {
             </button>
           )}
 
-          <button onClick={startQuiz} disabled={loading}>
+          <button onClick={() => startQuiz()} disabled={loading}>
             {loading ? "Checking name..." : "Start Exam"}
           </button>
           <button className="btn-secondary" onClick={fetchLeaderboard}>View Global Leaderboard</button>
+
+          {showJambModal && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <h3>Actual JAMB Questions</h3>
+                <p>These are some of the questions that JAMBites were asked earlier and have been recreated here.</p>
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <button className="btn-secondary" onClick={() => setShowJambModal(false)}>Close</button>
+                  <button onClick={() => startQuiz("JAMB Recalled Questions", 18)}>Let me test</button>
+                </div>
+              </div>
+            </div>
+          )}
         </>
       )}
 
@@ -1553,6 +1722,22 @@ export default function App() {
                   <div className="review-correct">
                     ✅ Correct Answer: {ans.options[ans.correctAnswer]}
                   </div>
+                  {ans.explanation && (
+                    <>
+                      {!showExplanations[i] ? (
+                        <button
+                          className="btn-view-explanation"
+                          onClick={() => setShowExplanations(prev => ({...prev, [i]: true}))}
+                        >
+                          View Explanation
+                        </button>
+                      ) : (
+                        <div className="review-explanation">
+                          💡 <strong>Explanation:</strong> {ans.explanation}
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
               ))
             )}
