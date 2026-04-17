@@ -1322,7 +1322,7 @@ export default function App() {
     setScreen("leaderboard");
     setLoading(true);
     try {
-      const { data } = await supabase.from('leaderboard').select('*').order('average_percentage', { ascending: false }).limit(50);
+      const { data } = await supabase.from('leaderboard').select('*').order('average_percentage', { ascending: false });
       if (data) setLeaderboard(data);
     } catch (e) {
       console.error("Error fetching from Supabase:", e);
