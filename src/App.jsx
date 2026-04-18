@@ -671,6 +671,97 @@ const allQuizData = [
     options: ["A) Chief Mrs. Solape Bayo", "B) Jombo, the security guard", "C) Mr. Jeremi Amos", "D) Mrs. Ibidun Gloss (The MD)"],
     answer: 3,
     explanation: "During the long break, the Managing Director (Mrs. Ibidun Gloss) took a walk to inspect a piece of land Stardom acquired near the back gate. There, she was shocked to discover that her teachers were hiding their luxury cars from the management. (Page 24-25)."
+  },
+  {
+    id: 525,
+    question: "According to Sola's testimony, how many ambulances showed up when her asthmatic child had a seizure in the UK?",
+    options: ["A) One", "B) Two", "C) Three", "D) None"],
+    answer: 1,
+    explanation: "Sola shared this to highlight the efficiency of the UK healthcare system. The text states: \"Two ambulances and another car arrived at her home in less than five minutes!\" (Page 16)."
+  },
+  {
+    id: 526,
+    question: "According to Bepo's friend who lived in the USA, how many days a week could one work to potentially earn up to $2,400 a month?",
+    options: ["A) Two days", "B) Up to four days", "C) Five days", "D) Seven days"],
+    answer: 1,
+    explanation: "While calculating the allure of the hourly wage system abroad, Bepo recalled a friend in the US who said \"one could work up to four days a week\" and earn massive amounts when converted to Naira. (Page 14)."
+  },
+  {
+    id: 527,
+    question: "\"When you thought she had disappeared into the bosom of sleep...\" What figure of speech is used in this expression describing Bibi Ladele?",
+    options: ["A) Simile", "B) Metaphor", "C) Personification", "D) Hyperbole"],
+    answer: 2,
+    explanation: "Sleep is an abstract concept, but here it is given human anatomical attributes (having a \"bosom\" to embrace or disappear into)."
+  },
+  {
+    id: 528,
+    question: "Why did Bepo eventually decide to renew his expired passport?",
+    options: ["A) He won an international award", "B) He wanted to go on an excursion to London", "C) Because he could no longer resist the pressure from his family to relocate", "D) The school mandated him to travel"],
+    answer: 2,
+    explanation: "Bepo had a phobia of the chaotic Nigerian passport offices and let his passport expire. However, by the first quarter of 2022, \"Bepo realised he could no longer resist pressure to travel from his family,\" making the renewal an emergency. (Page 48)."
+  },
+  {
+    id: 529,
+    question: "How much did Sola state she could earn daily in her promising new nursing/care job in the UK?",
+    options: ["A) £50", "B) £100", "C) £150", "D) Up to £200"],
+    answer: 3,
+    explanation: "During her phone call with Bepo, Sola noted that she had changed jobs more than three times since arriving in the UK, adding: \"The one I just got is more promising; it will fetch me up to £200 daily.\" (Page 15-16). (Note: Do not confuse this with Bepo's wife, Seri, who earns a monthly salary of £10,000)."
+  },
+  {
+    id: 530,
+    question: "In which hospital was Sola's daughter, Betty, showered with gifts on her birthday?",
+    options: ["A) Legacy Memorial Hospital", "B) A hospital in Manchester", "C) St. Nicholas Hospital", "D) General Hospital"],
+    answer: 1,
+    explanation: "We are told Sola and her husband had to settle in Manchester because they could not afford London rent. Hence, the hospital the ambulance took her child to was in Manchester. (Legacy Memorial and General Hospital are from the Nollywood movie Mrs. Ladele watched on Page 22)."
+  },
+  {
+    id: 531,
+    question: "What is the central theme of the novel \"The Lekki Headmaster\"?",
+    options: ["A) The negative impact of the Trans-Atlantic Slave Trade", "B) The \"Japa\" syndrome (Brain Drain) vs. Patriotism", "C) The corruption in Nigerian politics", "D) The rivalry between elite school students"],
+    answer: 1,
+    explanation: "The entire narrative revolves around Bepo's internal struggle with the societal pressure to migrate (Japa) versus his patriotic dedication to staying behind to develop Nigeria's education system."
+  },
+  {
+    id: 532,
+    question: "In what instance was the legendary writer, Professor Wole Soyinka, mentioned in the novel?",
+    options: ["A) During the English grammar dispute in the MD's office", "B) During Ikenna's speech about the excursion to Jos", "C) During the SSS 3 vs SSS 2 debate on Arts vs Sciences", "D) During Bepo's nightmare about Badagry"],
+    answer: 2,
+    explanation: "During Bepo's farewell week, a debate was held. The SSS 3 students defending the \"Arts\" argued that Nigeria had not won a Nobel Prize in Science, but \"Professor Wole Soyinka earned the Nobel Prize for Literature as far back as 1986.\" (Page 54)."
+  },
+  {
+    id: 533,
+    question: "Which state did Bepo serve in during his National Youth Service Corps (NYSC)?",
+    options: ["A) Lagos State", "B) Delta State", "C) Edo State", "D) Plateau State"],
+    answer: 1,
+    explanation: "Bepo learned a business trick to boost school enrollment from a school \"in Warri, Delta State, where he observed his National Youths Service.\" (Page 38)."
+  },
+  {
+    id: 534,
+    question: "After the crying incident at the assembly, who did the MD instruct to guide Bepo to his office and arrange to take him home?",
+    options: ["A) Mr. Audu and the VP", "B) Pastor Wande (with the guidance counsellor)", "C) The school nurse", "D) The Vice Principal alone"],
+    answer: 1,
+    explanation: "The MD told Pastor Wande: \"Please, guide him to his office and arrange to take him home... I learnt that the guidance counsellor [Mrs. Beke Egbin] was with him earlier. Perhaps, he can go with him.\" (Page 8)."
+  },
+  {
+    id: 535,
+    question: "Who believed the parent, Mr. Guta, when he wrongly claimed that Mr. Fafore committed a grammatical error?",
+    options: ["A) Principal Bepo", "B) Mr. Audu", "C) Mrs. Ibidun Gloss (The MD)", "D) The Vice Principal"],
+    answer: 2,
+    explanation: "Mr. Guta complained about the phrase \"Ade as well as Jide comes early.\" The MD blindly believed the wealthy parent and was ready to sack Fafore for \"illiteracy,\" until Bepo proved both the MD and the parent wrong. (Page 31-32)."
+  },
+  {
+    id: 536,
+    question: "\"Something seemed unusual in the way the principal walked to the podium from the back of the assembly. He moved his tall frame rather ponderously. He was not as smart as he used to be.\" \nThe literary technique used in this opening paragraph primarily builds what?",
+    options: ["A) Suspense", "B) Climax", "C) Personification", "D) Repetition"],
+    answer: 0,
+    explanation: "By starting the novel describing the usually vibrant principal acting slow, ponderous, and unusual, the author immediately builds suspense, making the reader eager to find out what is wrong with him before he bursts into tears."
+  },
+  {
+    id: 537,
+    question: "\"His complexion, for instance, was as fair as that of the yellow ant that the Yoruba called salamo...\" \nWhat figure of speech is used in this quote?",
+    options: ["A) Personification", "B) Simile", "C) Metaphor", "D) Repetition"],
+    answer: 1,
+    explanation: "A simile is a direct comparison between two different things using the words \"as\" or \"like\". Here, Bepo's fair complexion is directly compared to the yellow ant using \"as fair as\"."
   }
 ];
 
@@ -1198,7 +1289,20 @@ const allCategoryData = [
   { "id": 521, "chapter": "JAMB Recalled Questions" },
   { "id": 522, "chapter": "JAMB Recalled Questions" },
   { "id": 523, "chapter": "JAMB Recalled Questions" },
-  { "id": 524, "chapter": "JAMB Recalled Questions" }
+  { "id": 524, "chapter": "JAMB Recalled Questions" },
+  { "id": 525, "chapter": "JAMB Recalled Questions" },
+  { "id": 526, "chapter": "JAMB Recalled Questions" },
+  { "id": 527, "chapter": "JAMB Recalled Questions" },
+  { "id": 528, "chapter": "JAMB Recalled Questions" },
+  { "id": 529, "chapter": "JAMB Recalled Questions" },
+  { "id": 530, "chapter": "JAMB Recalled Questions" },
+  { "id": 531, "chapter": "JAMB Recalled Questions" },
+  { "id": 532, "chapter": "JAMB Recalled Questions" },
+  { "id": 533, "chapter": "JAMB Recalled Questions" },
+  { "id": 534, "chapter": "JAMB Recalled Questions" },
+  { "id": 535, "chapter": "JAMB Recalled Questions" },
+  { "id": 536, "chapter": "JAMB Recalled Questions" },
+  { "id": 537, "chapter": "JAMB Recalled Questions" }
 ];
 
 const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
@@ -1621,7 +1725,7 @@ export default function App() {
               setShowJambModal(true);
             }}
           >
-            ⭐ Actual JAMB Questions (Past Questions)
+            ⭐ Actual JAMB Questions (18th April, 2026 questions added)
           </button>
 
           {isNameLocked ? (
