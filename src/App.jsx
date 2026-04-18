@@ -1203,6 +1203,12 @@ const allCategoryData = [
 
 const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
 
+const getOrdinal = (n) => {
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+};
+
 export default function App() {
   const [screen, setScreen] = useState("login");
   const [name, setName] = useState("");
@@ -1580,6 +1586,12 @@ export default function App() {
     };
   }, [selectedCategory, passedCount]);
 
+  const userRank = useMemo(() => {
+    const safeId = name.trim().toLowerCase().replace(/\s+/g, "_");
+    const index = leaderboard.findIndex(entry => entry.id === safeId);
+    return index !== -1 ? index + 1 : null;
+  }, [leaderboard, name]);
+
   useEffect(() => {
     const max = poolInfo.questions.length;
     if (numQuestions > max) {
@@ -1814,7 +1826,14 @@ export default function App() {
       {screen === "leaderboard" && (
         <>
           <h1>🌍 Global Ranking</h1>
-          <p style={{ fontSize: "0.85rem", color: "#666" }}>Ranked by Cumulative Average Percentage</p>
+          <p style={{ fontSize: "0.85rem", color: "#666", marginBottom: "10px" }}>Ranked by Cumulative Average Percentage</p>
+
+          {userRank && (
+            <div className="notification-banner" style={{ marginBottom: "20px", textAlign: "center", backgroundColor: "#e3f2fd", borderColor: "#bbdefb", color: "#0d47a1" }}>
+              ✨ You're <strong>{getOrdinal(userRank)}</strong> on the leaderboard! {userRank === 1 ? "Keep it up!" : "You can rise up!"}
+            </div>
+          )}
+
           {loading ? <p>Loading scores from cloud...</p> : (
             <div className="table-wrapper">
               <table>
@@ -1822,9 +1841,13 @@ export default function App() {
                   <tr><th>Rank</th><th>Name</th><th>Avg %</th><th>Attempts</th></tr>
                 </thead>
                 <tbody>
-                  {leaderboard.map((entry, index) => {
-                    const rank = index + 1;
-                    let rankClass = "";
+                  {(() => {
+                    const currentSafeId = name.trim().toLowerCase().replace(/\s+/g, "_");
+                    return leaderboard.map((entry, index) => {
+                      const rank = index + 1;
+                      const isCurrentUser = entry.id === currentSafeId;
+
+                      let rankClass = "";
                     let medal = "";
                     if (rank === 1) {
                       rankClass = "rank-gold";
@@ -1837,15 +1860,20 @@ export default function App() {
                       medal = "🥉 ";
                     }
 
+                    if (isCurrentUser) {
+                      rankClass += " rank-user";
+                    }
+
                     return (
                       <tr key={index} className={rankClass}>
                         <td>{medal}#{rank}</td>
-                        <td>{entry.name}</td>
+                        <td>{entry.name} {isCurrentUser && <span style={{ fontSize: "0.8rem", color: "#0d47a1" }}>(You)</span>}</td>
                         <td style={{ color: "#00c853", fontWeight: "bold" }}>{entry.average_percentage}%</td>
-                        <td style={{ textAlign: "center" }}>{entry.total_attempts}</td>
-                      </tr>
-                    );
-                  })}
+                          <td style={{ textAlign: "center" }}>{entry.total_attempts}</td>
+                        </tr>
+                      );
+                    });
+                  })()}
                 </tbody>
               </table>
             </div>
